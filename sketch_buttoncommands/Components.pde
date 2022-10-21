@@ -1,22 +1,7 @@
-abstract class UIComponents {
-  int padding_left, padding_right, padding_top, padding_bot;
-  abstract int GetX1();
-  abstract int GetX2();
-  abstract int GetY1();
-  abstract int GetY2();
-  abstract void Setup();
-  abstract void Draw();
-  abstract void ProcessInput();
-}
-
-class Tilebar extends UIComponents {
-  ArrayList<Button> buttons;
-  int padding_left = 100;
-  int padding_top = 495;
-  int padding_right = 100; // was 500
-  int padding_bot = 5; // was 595
-  int max_rows = 2;
-  int max_collumns = 8;
+abstract class UI_Component {
+  // Fields
+  // Position fields
+  protected int padding_left, padding_right, padding_top, padding_bot;
   
   int GetX1() {
     return padding_left;
@@ -41,9 +26,17 @@ class Tilebar extends UIComponents {
   int GetHeight() {
     return GetY2() - GetY1();
   }
+  abstract void Initialize();
+  abstract void Draw();
+  abstract void ProcessInput();
+}
+
+class TilePalette extends UI_Component {
+  ArrayList<Button> buttons;
+  int max_rows = 2;
+  int max_collumns = 8;
   
   void CreateToolbarButtons() {
-    buttons = new ArrayList<Button>();
     var button_width = GetWidth()/8;
     var button_height = GetHeight()/2;
     var height_count = 0;
@@ -65,7 +58,13 @@ class Tilebar extends UIComponents {
     if(ENV.State == ApplicationState.Debug) println("Total buttons created = " + buttons.size());
   }
   
-  void Setup() {
+  void Initialize() {
+    // Buttons in the tilebar
+    buttons = new ArrayList<Button>();
+    padding_left = 100;
+    padding_top = 495;
+    padding_right = 100; // was 500
+    padding_bot = 5; // was 595
     CreateToolbarButtons();
   }
   
